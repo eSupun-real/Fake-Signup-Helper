@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fake Signup Helper</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      min-width: 300px;
+      padding: 16px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      background-color: white;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    h2 {
+      margin-top: 0;
+      color: #333;
+      font-size: 18px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 8px;
+    }
+    h3 {
+      margin-top: 12px;
+      margin-bottom: 8px;
+      color: #555;
+      font-size: 16px;
+    }
+    button {
+      background-color: #4285f4;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      margin: 8px 8px 8px 0;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #3367d6;
+    }
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    #verify, #autofill {
+      margin-top: 10px;
+    }
+    .section {
+      margin-bottom: 16px;
+    }
+    .data-field {
+      margin: 5px 0;
+    }
+    #verification {
+      margin-top: 10px;
+      padding: 8px;
+      background-color: #e8f0fe;
+      border-radius: 4px;
+    }
+    .success-message {
+      padding: 10px;
+      background-color: #e6f4ea;
+      color: #137333;
+      border-radius: 4px;
+      margin-top: 10px;
+    }
+    .error-message {
+      padding: 10px;
+      background-color: #fce8e6;
+      color: #c5221f;
+      border-radius: 4px;
+      margin-top: 10px;
+    }
+    .password-strength {
+      display: inline-block;
+      margin-left: 10px;
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+    .password-strength.strong {
+      background-color: #e6f4ea;
+      color: #137333;
+    }
+    .password-strength.medium {
+      background-color: #fef7e0;
+      color: #b06000;
+    }
+    .password-strength.weak {
+      background-color: #fce8e6;
+      color: #c5221f;
+    }
+    .password-controls {
+      display: flex;
+      align-items: center;
+      margin-top: 5px;
+    }
+    .copy-btn {
+      background: none;
+      border: none;
+      color: #4285f4;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 0;
+      padding: 0;
+    }
+    .copy-btn:hover {
+      text-decoration: underline;
+      background: none;
+    }
+    .option-row {
+      margin: 8px 0;
+    }
+    #passwordLength {
+      width: 100%;
+      margin-top: 5px;
+    }
+    .show-password-options {
+      background: none;
+      border: none;
+      color: #4285f4;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 0;
+      margin-left: 5px;
+    }
+    .show-password-options:hover {
+      text-decoration: underline;
+    }
+    .proxy-status {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .status-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+    .status-active {
+      background-color: #34a853;
+    }
+    .status-inactive {
+      background-color: #ea4335;
+    }
+    .proxy-buttons {
+      display: flex;
+      gap: 8px;
+    }
+    #disconnectProxy {
+      background-color: #ea4335;
+    }
+    #disconnectProxy:hover {
+      background-color: #d62516;
+    }
+    .loading-spinner {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      margin-left: 5px;
+      border: 2px solid rgba(0, 0, 0, 0.1);
+      border-top-color: #4285f4;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Fake Signup Helper</h2>
+    <div class="section">
+      <button id="generate">Generate Data</button>
+    </div>
+    <div id="data" class="section"></div>
+    <div id="emailData" class="section"></div>
+    <div id="passwordOptions" class="section" style="display:none;">
+      <h3>Password Options</h3>
+      <div class="option-row">
+        <label>
+          <input type="checkbox" id="includeNumbers" checked> Include Numbers
+        </label>
+      </div>
+      <div class="option-row">
+        <label>
+          <input type="checkbox" id="includeSymbols" checked> Include Symbols
+        </label>
+      </div>
+      <div class="option-row">
+        <label>Length: <span id="lengthValue">16</span>
+          <input type="range" id="passwordLength" min="8" max="32" value="16">
+        </label>
+      </div>
+      <button id="generateNewPassword">Generate New Password</button>
+    </div>
+    <div id="verification" class="section" style="display:none;"></div>
+    <div id="proxy" class="section">
+      <h3>Proxy Connection</h3>
+      <div class="proxy-status">
+        <div id="proxyStatusIndicator" class="status-indicator status-inactive"></div>
+        <span id="proxyStatus">Not connected</span>
+      </div>
+      <div class="proxy-buttons">
+        <button id="switchProxy">Switch Proxy</button>
+        <button id="disconnectProxy">Disconnect Proxy</button>
+      </div>
+    </div>
+  </div>
+  <!-- Include the Mailjs library -->
+  <script src="mailjs.min.js"></script>
+  <script src="mailjs-handler.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

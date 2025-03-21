@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "Fake Signup Helper",
+  "version": "1.0",
+  "description": "Helps with signing up using fake details, disposable email, and proxies.",
+  "permissions": [
+    "proxy",
+    "tabs",
+    "storage",
+    "webRequest",
+    "webRequestBlocking",
+    "activeTab",
+    "scripting"
+  ],
+  "optional_permissions": [
+    "browserSettings"
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "fake-signup-helper@example.com",
+      "strict_min_version": "57.0"
+    }
+  },
+  "host_permissions": [
+    "https://www.genratr.com/*",
+    "https://api.mail.tm/*",
+    "https://randomuser.me/*",
+    "https://api.ipify.org/*",
+    "https://raw.githubusercontent.com/*",
+    "http://ip-api.com/*",
+    "<all_urls>"
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}

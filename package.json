@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@cemalgnlts/mailjs": "^3.0.1"
+  }
+}
